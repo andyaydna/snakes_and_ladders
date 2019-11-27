@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="eng">
+        <head>
+                <title>Snakes & Ladders</title>
+                <link rel="stylesheet" type="text/css" href="css/style.css">
+        </head>
+
+        <body>
+
+                <div>
+                        <img id="player" src="images/red.png" style="position: relative; top:0px; left:0px; width:38.75px; height:38.75px;">
+
+                </div>
+                <div id="THE_DICES">
+                        <img src="images/1.png" id="dice1"> 
+                        <img src="images/1.png" id="dice2"> 
+                        <button id="button">roll dice</button>
+                        <img src='' id="character1">
+                        <img src='' id="character2">
+                        <img src='' id="character3">
+                        <img src='' id="character4">
+                </div>
+
+                <audio id="dice_sound" src="src/dice_roll.wav" ></audio>
+                
+                <script>
+                        
+                        let array1 = []
+                        let array2 = []
+                        let tile = 0
+                        player_num = 0
+                        let player_dict = {'player1': 0, 'player2': 0, 'player3': 0}
+
+
+
+                        function dice_roll() {
+
+                                let audio = document.getElementById("dice_sound");
+                                audio.play();
+
+                                dice_one = random(1, 7)
+                                if (dice_one == 1) {
+                                        document.getElementById("dice1").src="images/1.png";
+                                } else if (dice_one == 2) {
+                                        document.getElementById("dice1").src="images/2.png";
+                                } else if (dice_one == 3) {
+                                        document.getElementById("dice1").src="images/3.png";
+                                } else if (dice_one == 4) {
+                                        document.getElementById("dice1").src="images/4.png";
+                                } else if (dice_one == 5) {
+                                        document.getElementById("dice1").src="images/5.png";
+                                } else if (dice_one == 6) {
+                                        document.getElementById("dice1").src="images/6.png";
+                                }    
+                                array1.push(dice_one)
+                                
+
+
+                                dice_two = random(1, 7)
+                                if (dice_two == 1) {
+                                        document.getElementById("dice2").src="images/1.png";
+                                } else if (dice_two == 2) {
+                                        document.getElementById("dice2").src="images/2.png";
+                                } else if (dice_two == 3) {
+                                        document.getElementById("dice2").src="images/3.png";
+                                } else if (dice_two == 4) {
+                                        document.getElementById("dice2").src="images/4.png";
+                                } else if (dice_two == 5) {
+                                        document.getElementById("dice2").src="images/5.png";
+                                } else if (dice_two == 6) {
+                                        document.getElementById("dice2").src="images/6.png";
+                                }
+                                array2.push(dice_two)
+                                console.log()
+
+                                
+                        }
+
+
+                        function clear_arr() {
+                                let array1 = []
+                                let array2 = []
+                        }
+
+
+                        function starter() {
+                                start = setInterval(dice_roll, 10)
+                        }
+
+
+                        function stopper() {
+                                clearInterval(start)
+                        }
+
+
+                        function dice_roller() {
+                                document.getElementById('button').removeEventListener("click", dice_roller)
+                                document.getElementById('dice1').removeEventListener("click", dice_roller)
+                                document.getElementById('dice2').removeEventListener("click", dice_roller)
+                                starter()
+                                setTimeout(stopper, 2000)
+                                setTimeout(clicktime, 5000)
+                                setTimeout(dice_sum, 2001)
+
+
+
+                        }
+
+
+                        function clicktime() {
+                                document.getElementById("button").addEventListener("click", dice_roller)
+                                document.getElementById("dice1").addEventListener("click", dice_roller)
+                                document.getElementById("dice2").addEventListener("click", dice_roller)
+                        }
+
+
+                        function random(a, b){
+                                if (a < b) {
+                                        num1 = a
+                                        num2 = b
+                                } else {
+                                        num1 = b
+                                        num2 = a
+                                }
+                                if (num1 < 0) {
+                                        number = (num1)
+                                }
+                                number = Math.floor((num1 + (num2 - num1) * Math.random()))
+                                return number
+                        }
+
+
+                        function dice_sum() {
+                                last_1 = array1[array1.length - 1]
+                                console.log("dice 1 =", last_1)
+                                last_2 = array2[array2.length - 1]
+                                console.log("dice 2 =", last_2)
+                                sum = last_1 + last_2
+                                console.log("total =", sum)
+
+                                clear_arr()
+                                if (player_num > 2) {
+                                        player_num = 0
+                                } if (player_num == 0) {
+                                        if (player_dict['player1'] <= 100) {
+                                                player_dict['player1'] += sum
+                                                tile = tile + sum
+                                                console.log(player_dict) 
+                                                console.log('player 1 tile:', player_dict['player1'])
+                                        }
+                                } if (player_num == 1) {
+                                        if (player_dict['player2'] <= 100) {
+                                                player_dict['player2'] += sum
+                                                tile = tile + sum
+                                                console.log(player_dict)
+                                                console.log('player 2 tile:', player_dict['player2'])
+                                        }
+                                } if (player_num == 2) {
+                                        if (player_dict['player3'] <= 100) {
+                                                player_dict['player3'] += sum
+                                                tile = tile + sum
+                                                console.log(player_dict)         
+                                                console.log('player 3 tile:', player_dict['player3'])
+                                        }
+                                }
+                                let check = check_winner()
+                                special_case()
+                                player_num = player_num + 1
+                                if (check == true) {
+                                        setTimeout(end_game, 5000)
+                                }
+                                console.log('yeet', sum)
+                                player_mover(sum)
+                                return sum
+
+                                //can return player_num here and put it into other paramaters
+                        }
+
+
+                        function check_winner() {
+                                if (player_num == 0) {
+                                        if (player_dict['player1'] >= 100) {
+                                                console.log('PLAYER 1 IS THE WINNER')
+                                                return true
+                                        }
+                                }
+                                if (player_num == 1) {
+                                        if (player_dict['player2'] >= 100) {
+                                                console.log('PLAYER 2 IS THE WINNER')
+                                                return true
+                                        }
+                                }
+                                if (player_num == 2) {
+                                        if (player_dict['player3'] >= 100) {
+                                                console.log('PLAYER 3 IS THE WINNER')
+                                                return true
+                                        }
+                                }
+                                
+                        }
+
+
+                        function end_game() {
+                                window.location.reload()
+                        }
+
+                        // THIS FUNCTION CAN BE MADE SHORTER BY HAVING PLAYER IN THE PARAMETER (we can fix this up after the game is functional)
+                        function special_case() {
+                                if (player_dict['player1'] == 2) {
+                                        player_dict['player1'] = 38
+                                } else if (player_dict['player1'] == 4) {
+                                        player_dict['player1'] = 14
+                                } else if (player_dict['player1'] == 9) {
+                                        player_dict['player1'] = 31
+                                } else if (player_dict['player1'] == 33) {
+                                        player_dict['player1'] = 85
+                                } else if (player_dict['player1'] == 52) {
+                                        player_dict['player1'] = 88
+                                } else if (player_dict['player1'] == 80) {
+                                        player_dict['player1'] = 99
+                                } else if (player_dict['player1'] == 98) {
+                                        player_dict['player1'] = 8
+                                } else if (player_dict['player1'] == 92) {
+                                        player_dict['player1'] = 53
+                                } else if (player_dict['player1'] == 62) {
+                                        player_dict['player1'] = 57
+                                } else if (player_dict['player1'] == 56) {
+                                        player_dict['player1'] = 15
+                                } else if (player_dict['player1'] == 51) {
+                                        player_dict['player1'] = 15
+                                }                               
+                                if (player_dict['player2'] == 2) {
+                                        player_dict['player2'] = 38
+                                } else if (player_dict['player2'] == 4) {
+                                        player_dict['player2'] = 14
+                                } else if (player_dict['player2'] == 9) {
+                                        player_dict['player2'] = 31
+                                } else if (player_dict['player2'] == 33) {
+                                        player_dict['player2'] = 85
+                                } else if (player_dict['player2'] == 52) {
+                                        player_dict['player2'] = 88
+                                } else if (player_dict['player2'] == 80) {
+                                        player_dict['player2'] = 99
+                                } else if (player_dict['player2'] == 98) {
+                                        player_dict['player2'] = 8
+                                } else if (player_dict['player2'] == 92) {
+                                        player_dict['player2'] = 53
+                                } else if (player_dict['player2'] == 62) {
+                                        player_dict['player2'] = 57
+                                } else if (player_dict['player2'] == 56) {
+                                        player_dict['player2'] = 15
+                                } else if (player_dict['player2'] == 51) {
+                                        player_dict['player2'] = 15
+                                }
+                                if (player_dict['player3'] == 2) {
+                                        player_dict['player3'] = 38
+                                } else if (player_dict['player3'] == 4) {
+                                        player_dict['player3'] = 14
+                                } else if (player_dict['player3'] == 9) {
+                                        player_dict['player3'] = 31
+                                } else if (player_dict['player3'] == 33) {
+                                        player_dict['player3'] = 85
+                                } else if (player_dict['player3'] == 52) {
+                                        player_dict['player3'] = 88
+                                } else if (player_dict['player3'] == 80) {
+                                        player_dict['player3'] = 99
+                                } else if (player_dict['player3'] == 98) {
+                                        player_dict['player3'] = 8
+                                } else if (player_dict['player3'] == 92) {
+                                        player_dict['player3'] = 53
+                                } else if (player_dict['player3'] == 62) {
+                                        player_dict['player3'] = 57
+                                } else if (player_dict['player3'] == 56) {
+                                        player_dict['player3'] = 15
+                                } else if (player_dict['player3'] == 51) {
+                                        player_dict['player3'] = 15
+                                }
+                                console.log(player_dict['player1'])
+                                console.log(player_dict['player2'])
+                                console.log(player_dict['player3'])
+                        }
+
+
+
+
+
+                        // special cases up
+                        // 2 = 38
+                        // 4 = 14
+                        // 9 = 31
+                        // 33 = 85
+                        // 52 = 88
+                        // 80 = 99
+
+                        //special cases down
+                        // 98 = 8
+                        // 92 = 53
+                        // 62 = 57
+                        // 56 = 15
+                        // 51 = 11
+
+
+                        //THIS FUCNTION CAN ALSO BE MADE SHORTER BY HAVING PLAYER IN THE PARAMATER BUT WE CAN FIX THAT SHIT UP LATER
+                        myleft = 0
+                        setting = 0
+                        mydown = 0
+                        myright = 0
+                        function move_player_right() {
+                                document.getElementById('player').style.position='relative'
+                                document.getElementById('player').style.left=myleft +'%';
+                                myleft +=.04
+                                console.log('this is my left',myleft)
+                                if (myleft >= 55 && myleft <= 55.04) {
+                                        document.getElementById('player').style.position='absolute'
+                                        right_stop()
+                                        move_player_down()
+                                        document.getElementById('player').style.position='relative'
+ 
+
+                                } 
+                                if (myleft >= (5.5 * setting)) {
+
+                                        right_stop()
+                                }
+                                
+                        
+                                
+                        }
+
+                        function move_player_left() {
+                                document.getElementById('player').style.position='relative'
+                                document.getElementById('player').style.left=(myright*-1) +'px';
+                                myright +=.1
+
+
+                                console.log('this is my right',myright) 
+                                if (myright >= (5.5 * setting)) {
+                                        left_stop()
+                                }
+                        }
+
+                        function move_player_down() {
+                                mydown = 10
+                                document.getElementById('player').style.top=mydown +'%';
+
+
+                        }
+
+                        function player_mover(num) {
+                                if (myleft <= 55) {
+                                        player_move_righty = setInterval(move_player_right,1)
+                                }
+                                if (myleft >= 55) {
+                                        player_move_lefty = setInterval(move_player_left,1)
+                                } 
+                                setting = setting + num
+                                console.log('this is setting',setting)
+                                console.log('this is myleft', myleft)
+
+
+                        }
+
+                        function right_stop() {
+                                clearInterval(player_move_righty)
+
+                        }
+                        function left_stop() {
+                                clearInterval(player_move_lefty)
+                        }
+
+
+
+
+                        document.getElementById("button").addEventListener("click", dice_roller)
+                        document.getElementById("dice1").addEventListener("click", dice_roller)
+                        document.getElementById("dice2").addEventListener("click", dice_roller)
+                </script>
+        </body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <style>
+        #play_ {
+            position: absolute;
+            left: 35%;
+            font-size: 500%;
+            text-align: center;
+            top: 40%;
+        }
+    </style>
+    <body>
+
+        <button id="play_">CLICK TO PLAY</button>
+ 
+        <script>
+
+            function click_to_play(){
+
+
+            }
+
+            function players() {
+                num_players = parseInt(prompt('how many players?'))
+                if ((check_number(num_players)) == true) {
+
+                }
+            }
+
+            function check_number(number) {
+                if (Number.isInteger(number)== true) {
+                    return true
+                } else {
+                    window.alert('please enter a number')
+                    players()
+                }
+            }
+
+            function click_dice() {
+
+                amount_to_move = random(0,6)
+                tile = tile + amount_to_move
+            }
+
+
+
+            document.getElementById("play_").addEventListener("click", players) -->
