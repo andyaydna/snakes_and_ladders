@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="eng">
+
+<head>
+        <title>Snakes & Ladders</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<style>
+        /* #myContainer {
+                width: 5%;
+                height: 5%;
+                position: relative;
+                background: yellow;
+        } */
+</style>
+
+<body>
+
+        <!-- <div id="myContainer" style="width: 400px;
+        height: 400px;sum
+        position: relative;
+        background: yellow"> -->  
+        <!-- </div> -->
+        <!-- background:URL('../images/snake_ladder.png');
+        position: relative;
+        width:1000px;
+        height:1000px;
+        background-repeat: no-repeat;  -->
+    <!-- } -->
+
+        <div id="BOARD">
+                <div id="realBoard">
+                        <img id="player" src="images/red.png"> <!-- style="position:absolute; left:3%; bottom: 4%; width:38.75px; height:38.75px;">-->
+                </div>
+                <img id="board_img" src="images/snake_ladder.png" alt="">
+        </div>
+        
+        <div id="THE_DICES">
+                <img src="images/1.png" id="dice1">
+                <img src="images/1.png" id="dice2">
+                <button id="button">roll dice</button>
+                <img src='' id="character1">
+                <img src='' id="character2">
+                <img src='' id="character3">
+                <img src='' id="character4">
+        </div>
+
+        <audio id="dice_sound" src="src/dice_roll.wav"></audio>
+
+        <!-- <p>
+                <button onclick="myMoveRight()">Click right</button>
+                <button onclick="myMoveLeft()">Click left</button>
+                <button onclick="myMoveDown()">Click down</button>
+                <button onclick="myMoveUp()">Click up</button>
+        </p> -->
+                        
+        <script>
+
+                let array1 = []
+                let array2 = []
+                let tile = 0
+                player_num = 0
+                let player_dict = { 'player1': 0, 'player2': 0, 'player3': 0 }
+
+
+
+                function dice_roll() {
+
+                        let audio = document.getElementById("dice_sound");
+                        audio.play();
+
+                        dice_one = random(1, 7)
+                        if (dice_one == 1) {
+                                document.getElementById("dice1").src = "images/1.png";
+                        } else if (dice_one == 2) {
+                                document.getElementById("dice1").src = "images/2.png";
+                        } else if (dice_one == 3) {
+                                document.getElementById("dice1").src = "images/3.png";
+                        } else if (dice_one == 4) {
+                                document.getElementById("dice1").src = "images/4.png";
+                        } else if (dice_one == 5) {
+                                document.getElementById("dice1").src = "images/5.png";
+                        } else if (dice_one == 6) {
+                                document.getElementById("dice1").src = "images/6.png";
+                        }
+                        array1.push(dice_one)
+
+
+
+                        dice_two = random(1, 7)
+                        if (dice_two == 1) {
+                                document.getElementById("dice2").src = "images/1.png";
+                        } else if (dice_two == 2) {
+                                document.getElementById("dice2").src = "images/2.png";
+                        } else if (dice_two == 3) {
+                                document.getElementById("dice2").src = "images/3.png";
+                        } else if (dice_two == 4) {
+                                document.getElementById("dice2").src = "images/4.png";
+                        } else if (dice_two == 5) {
+                                document.getElementById("dice2").src = "images/5.png";
+                        } else if (dice_two == 6) {
+                                document.getElementById("dice2").src = "images/6.png";
+                        }
+                        array2.push(dice_two)
+                        console.log()
+
+
+                }
+
+
+                function clear_arr() {
+                        let array1 = []
+                        let array2 = []
+                }
+
+
+                function starter() {
+                        start = setInterval(dice_roll, 10)
+                }
+
+
+                function stopper() {
+                        clearInterval(start)
+                }
+
+
+                // function dice_roller() {
+                //         document.getElementById('button').removeEventListener("click", dice_roller)
+                //         document.getElementById('dice1').removeEventListener("click", dice_roller)
+                //         document.getElementById('dice2').removeEventListener("click", dice_roller)
+                //         starter()
+                //         setTimeout(stopper, 2000)
+                //         setTimeout(clicktime, 5000)
+                //         setTimeout(dice_sum, 2001)
+
+
+
+
+                // }
+
+
+                // function clicktime() {
+                //         document.getElementById("button").addEventListener("click", dice_roller)
+                //         document.getElementById("dice1").addEventListener("click", dice_roller)
+                //         document.getElementById("dice2").addEventListener("click", dice_roller)
+                // }
+
+
+                function random(a, b) {
+                        if (a < b) {
+                                num1 = a
+                                num2 = b
+                        } else {
+                                num1 = b
+                                num2 = a
+                        }
+                        if (num1 < 0) {
+                                number = (num1)
+                        }
+                        number = Math.floor((num1 + (num2 - num1) * Math.random()))
+                        return number
+                }
+
+
+                function dice_sum() {
+                        last_1 = array1[array1.length - 1]
+                        console.log("dice 1 =", last_1)
+                        last_2 = array2[array2.length - 1]
+                        console.log("dice 2 =", last_2)
+                        sum = last_1 + last_2
+                        console.log("total =", sum)
+
+                        clear_arr()
+                        if (player_num > 2) {
+                                player_num = 0
+                        } if (player_num == 0) {
+                                if (player_dict['player1'] <= 100) {
+                                        player_dict['player1'] += sum
+                                        tile = tile + sum
+                                        console.log(player_dict)
+                                        console.log('player 1 tile:', player_dict['player1'])
+                                }
+                        } if (player_num == 1) {
+                                if (player_dict['player2'] <= 100) {
+                                        player_dict['player2'] += sum
+                                        tile = tile + sum
+                                        console.log(player_dict)
+                                        console.log('player 2 tile:', player_dict['player2'])
+                                }
+                        } if (player_num == 2) {
+                                if (player_dict['player3'] <= 100) {
+                                        player_dict['player3'] += sum
+                                        tile = tile + sum
+                                        console.log(player_dict)
+                                        console.log('player 3 tile:', player_dict['player3'])
+                                }
+                        }
+                        let check = check_winner()
+                        special_case()
+                        player_num = player_num + 1
+                        if (check == true) {
+                                setTimeout(end_game, 5000)
+                        }
+                        console.log('yeet', sum)
+                        playerMoverator(sum, tile)
+
+                        return sum
+
+                        //can return player_num here and put it into other paramaters
+                }
+
+
+                function check_winner() {
+                        if (player_num == 0) {
+                                if (player_dict['player1'] >= 100) {
+                                        console.log('PLAYER 1 IS THE WINNER')
+                                        return true
+                                }
+                        }
+                        if (player_num == 1) {
+                                if (player_dict['player2'] >= 100) {
+                                        console.log('PLAYER 2 IS THE WINNER')
+                                        return true
+                                }
+                        }
+                        if (player_num == 2) {
+                                if (player_dict['player3'] >= 100) {
+                                        console.log('PLAYER 3 IS THE WINNER')
+                                        return true
+                                }
+                        }
+
+                }
+
+
+                function end_game() {
+                        window.location.reload()
+                }
+
+                // THIS FUNCTION CAN BE MADE SHORTER BY HAVING PLAYER IN THE PARAMETER (we can fix this up after the game is functional)
+                function special_case() {
+                        if (player_dict['player1'] == 2) {
+                                player_dict['player1'] = 38
+                        } else if (player_dict['player1'] == 4) {
+                                player_dict['player1'] = 14
+                        } else if (player_dict['player1'] == 9) {
+                                player_dict['player1'] = 31
+                        } else if (player_dict['player1'] == 33) {
+                                player_dict['player1'] = 85
+                        } else if (player_dict['player1'] == 52) {
+                                player_dict['player1'] = 88
+                        } else if (player_dict['player1'] == 80) {
+                                player_dict['player1'] = 99
+                        } else if (player_dict['player1'] == 98) {
+                                player_dict['player1'] = 8
+                        } else if (player_dict['player1'] == 92) {
+                                player_dict['player1'] = 53
+                        } else if (player_dict['player1'] == 62) {
+                                player_dict['player1'] = 57
+                        } else if (player_dict['player1'] == 56) {
+                                player_dict['player1'] = 15
+                        } else if (player_dict['player1'] == 51) {
+                                player_dict['player1'] = 15
+                        }
+                        if (player_dict['player2'] == 2) {
+                                player_dict['player2'] = 38
+                        } else if (player_dict['player2'] == 4) {
+                                player_dict['player2'] = 14
+                        } else if (player_dict['player2'] == 9) {
+                                player_dict['player2'] = 31
+                        } else if (player_dict['player2'] == 33) {
+                                player_dict['player2'] = 85
+                        } else if (player_dict['player2'] == 52) {
+                                player_dict['player2'] = 88
+                        } else if (player_dict['player2'] == 80) {
+                                player_dict['player2'] = 99
+                        } else if (player_dict['player2'] == 98) {
+                                player_dict['player2'] = 8
+                        } else if (player_dict['player2'] == 92) {
+                                player_dict['player2'] = 53
+                        } else if (player_dict['player2'] == 62) {
+                                player_dict['player2'] = 57
+                        } else if (player_dict['player2'] == 56) {
+                                player_dict['player2'] = 15
+                        } else if (player_dict['player2'] == 51) {
+                                player_dict['player2'] = 15
+                        }
+                        if (player_dict['player3'] == 2) {
+                                player_dict['player3'] = 38
+                        } else if (player_dict['player3'] == 4) {
+                                player_dict['player3'] = 14
+                        } else if (player_dict['player3'] == 9) {
+                                player_dict['player3'] = 31
+                        } else if (player_dict['player3'] == 33) {
+                                player_dict['player3'] = 85
+                        } else if (player_dict['player3'] == 52) {
+                                player_dict['player3'] = 88
+                        } else if (player_dict['player3'] == 80) {
+                                player_dict['player3'] = 99
+                        } else if (player_dict['player3'] == 98) {
+                                player_dict['player3'] = 8
+                        } else if (player_dict['player3'] == 92) {
+                                player_dict['player3'] = 53
+                        } else if (player_dict['player3'] == 62) {
+                                player_dict['player3'] = 57
+                        } else if (player_dict['player3'] == 56) {
+                                player_dict['player3'] = 15
+                        } else if (player_dict['player3'] == 51) {
+                                player_dict['player3'] = 15
+                        }
+                        console.log(player_dict['player1'])
+                        console.log(player_dict['player2'])
+                        console.log(player_dict['player3'])
+                }
+
+
+
+
+
+
+                original_pos_vert = -350
+                original_pos_hor = 0
+
+
+                // function myMoveRight(sum) {
+                //         var elem = document.getElementById("player");
+                //         var right_num = (original_pos_hor + (35 * sum));
+                //         var id = setInterval(frame, 10);
+                //         console.log('this is vert', original_pos_vert)
+                //         if (original_pos_vert == -315) {
+                //                 myMoveLeft(sum)
+                //         } else if (original_pos_vert == -244) {
+                //                 myMoveLeft(sum)
+                //         } else if (original_pos_vert == -173) {
+                //                 myMoveLeft(sum)
+                //         } else if (original_pos_vert == -102) {
+                //                 myMoveLeft(sum)
+                //         } else if (original_pos_vert == -31) {
+                //                 myMoveLeft(sum)
+                //         }
+
+                //         else {
+                //                 var id = setInterval(frame, 10);
+                //                 function frame() {
+                //                         if (original_pos_hor == right_num) {
+                //                                 clearInterval(id);
+
+                //                         } else if (original_pos_hor == 350) {
+                //                                 console.log('THIS IS THE HOR', original_pos_hor)
+                //                                 clearInterval(id)
+                //                                 console.log('THIS IS THE right', right_num)
+                //                                 myMoveUp()
+                //                                 clearInterval(id)
+                //                                 let move_left = (right_num - original_pos_hor) / 35
+                //                                 console.log(move_left)
+                //                                 myMoveLeft(move_left)
+
+                //                         } else {
+                //                                 original_pos_hor++;
+
+                //                                 elem.style.left = original_pos_hor + 'px';
+
+                //                         }
+
+                //                 }
+                //         }
+                // }
+                // function show() {
+                //         console.log(original_pos_hor)
+                // }
+
+
+                // function myMoveLeft(sum) {
+                //         var elem = document.getElementById("player");
+                //         var left_num = (original_pos_hor - (35 * sum));
+                //         var id = setInterval(frame, 10);
+                //         console.log(original_pos_hor, ' this is the left section')
+                //         function frame() {
+                //                 if (original_pos_hor == left_num) {
+                //                         clearInterval(id);
+
+                //                 } else if (original_pos_hor == 0) {
+                //                         clearInterval(id)
+                //                         myMoveUp()
+                //                         clearInterval(id)
+                //                         let move_right = (left_num - original_pos_hor) / 35
+                //                         myMoveRight(move_right)
+
+                //                 } else {
+                //                         original_pos_hor--;
+
+                //                         elem.style.left = original_pos_hor + 'px';
+
+                //                 }
+                //         }
+                // }
+                // function myMoveDown() {
+                //         var elem = document.getElementById("player");
+                //         var down_num = (original_pos_vert - 35)
+
+                //         var id = setInterval(frame, 10);
+                //         function frame() {
+                //                 if (original_pos_vert == down_num) {
+                //                         clearInterval(id);
+                //                 } else {
+                //                         original_pos_vert--;
+
+                //                         elem.style.top = (original_pos_vert * -1) + 'px';
+                //                         console.log(original_pos_vert)
+                //                 }
+                //         }
+                // }
+
+                // function myMoveUp() {
+                //         var elem = document.getElementById("player");
+                //         var up_num = (original_pos_vert + 35)
+                //         console.log('this is upnum', up_num)
+                //         var id_up = setInterval(frame, 10);
+                //         function frame() {
+                //                 if (original_pos_vert == up_num) {
+                //                         clearInterval(id_up);
+                //                         console.log('this is where it stops', up_num)
+                //                 } else {
+                //                         if (original_pos_vert == up_num) {
+                //                                 clearInterval(id_up)
+                //                         } else {
+
+                //                                 original_pos_vert++;
+
+                //                                 elem.style.top = (original_pos_vert * -1) + 'px';
+                //                                 console.log(original_pos_vert)
+                //                         }
+                //                 }
+                //         }
+                // }
+
+
+                function playerMoverator(sum, tile) {
+                        console.log('player mover',sum, tile)
+                        tile = tile % 10
+                        console.log(tile, 'this is the tenth')
+                        if (original_pos_vert == -350) {
+                                myMoveRight(sum, tile)
+                                console.log('this is the 1st row')
+                        }
+                        if (original_pos_vert == -280) {
+                                myMoveRight(sum, tile)
+                                console.log('this is the 3rd row')
+                        }
+                        if (original_pos_vert == -210) {
+                                myMoveRight(sum, tile)
+                                console.log('this is the 5th row')
+                        }
+                        if (original_pos_vert == -140) {
+                                myMoveRight(sum, tile)
+                                console.log('this is the 7th row')
+                        }
+                        if (original_pos_vert == -70) {
+                                myMoveRight(sum, tile)
+                                console.log('this is the 9th row')
+                        }
+                        if (original_pos_vert == -315) {
+                                myMoveLeft(sum, tile)
+                                console.log('this is the 2nd row')
+                        }
+                        if (original_pos_vert == -245) {
+                                myMoveLeft(sum, tile)
+                                console.log('this is the 4th row')
+                        }
+                        if (original_pos_vert == -175) {
+                                myMoveLeft(sum, tile)
+                                console.log('this is the 6th row')
+                        }
+                        if (original_pos_vert == -105) {
+                                myMoveLeft(sum, tile)
+                                console.log('this is the 8th row')
+                        }
+                        if (original_pos_vert == -35) {
+                                myMoveLeft(sum, tile)
+                                console.log('this is the 10th row')
+                        }
+                }
+
+                function myMoveRight(sum, tenth) {
+
+                        var elem = document.getElementById("player");
+                        var right_num = 0
+                        var right_num = (sum * 35) + original_pos_hor ;
+
+                        var id = setInterval(frame, 10);
+                        function frame() {
+                                if (original_pos_hor == right_num) {
+                                        clearInterval(id);
+                                
+                                } else if (original_pos_hor == 350) {
+                                        console.log(tenth, 'this is tentch')
+                                        clearInterval(id)
+                                        if (tenth > 0) {
+                                                myMoveUp()
+                                                let lefter = tenth - 1
+                                                console.log(lefter, 'this is lefter')
+                                                if (lefter > 0) {
+                                                        console.log('this is lefter', lefter)
+                                                        myMoveLeft(lefter, tenth)
+                                                }
+                                        }
+
+                                } else {
+                                original_pos_hor++;
+
+                                elem.style.left = original_pos_hor + 'px';
+
+
+                                }
+                        }
+
+                }
+
+                function myMoveLeft(sum, tenth) {
+                        console.log(tenth, 'THIS IS THE TENTH')
+                        var elem = document.getElementById("player");
+                        var left_num = original_pos_hor - (sum * 35);
+                        console.log(left_num, 'this is the left num')
+                        console.log(sum, 'this is sum')
+                        var id = setInterval(frame, 10);
+                        function frame() {
+                                if (original_pos_hor == left_num) {
+                                        clearInterval(id);
+                                } else if (original_pos_hor == 0) {
+                                        clearInterval(id)
+                                        myMoveUpOnce()
+                                        let righter = tenth - 1
+                                        if (righter > 0) {
+                                                myMoveRight(righter, tenth)
+                                        }
+                                }
+                                        
+                                 else {
+                                        original_pos_hor--;
+
+                                        elem.style.left = original_pos_hor + 'px';
+
+                                }
+                        }
+                }
+                function myMoveDown() {
+                        var elem = document.getElementById("player");
+                        var down_num = (original_pos_vert - 35)
+
+                        var id = setInterval(frame, 10);
+                        function frame() {
+                                if (original_pos_vert == down_num) {
+                                        clearInterval(id);
+                                } else {
+                                        original_pos_vert--;
+
+                                        elem.style.top = (original_pos_vert * -1) + 'px';
+                                        console.log(original_pos_vert)
+                                }
+                        }
+                }
+
+                function myMoveUp() {
+                        var elem = document.getElementById("player");
+                        var up_num = (original_pos_vert + 35)
+                        console.log(up_num)
+                        var id_up = setInterval(frame, 10);
+                        function frame() {
+                                if (original_pos_vert == up_num) {
+                                        clearInterval(id_up);
+                                } else {
+                                        original_pos_vert++;
+
+                                        elem.style.top = (original_pos_vert * -1) + 'px';
+
+                                }
+                        }
+                }
+                function myMoveUpOnce() {
+                        var elem = document.getElementById("player");
+                        var up_num = (original_pos_vert + 35)
+                        console.log(up_num)
+                        var id_up = setInterval(frame, 10);
+                        function frame() {
+                                if (original_pos_vert == up_num) {
+                                        clearInterval(id_up);
+                                } else {
+                                        original_pos_vert++;
+
+                                        elem.style.top = (original_pos_vert * -1) + 'px';
+
+                                }
+                        }
+                }
+
+
+
+
+                document.getElementById("button").addEventListener("click", dice_roller)
+                document.getElementById("dice1").addEventListener("click", dice_roller)
+                document.getElementById("dice2").addEventListener("click", dice_roller)
+        </script>
+</body>
+
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <style>
+        #play_ {
+            position: absolute;
+            left: 35%;
+            font-size: 500%;
+            text-align: center;
+            top: 40%;
+        }
+    </style>
+    <body>
+
+        <button id="play_">CLICK TO PLAY</button>
+ 
+        <script>
+
+            function click_to_play(){
+
+
+            }
+
+            function players() {
+                num_players = parseInt(prompt('how many players?'))
+                if ((check_number(num_players)) == true) {
+
+                }
+            }
+
+            function check_number(number) {
+                if (Number.isInteger(number)== true) {
+                    return true
+                } else {
+                    window.alert('please enter a number')
+                    players()
+                }
+            }
+
+            function click_dice() {
+
+                amount_to_move = random(0,6)
+                tile = tile + amount_to_move
+            }
+
+
+
+            document.getElementById("play_").addEventListener("click", players) -->
